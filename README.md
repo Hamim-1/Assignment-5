@@ -53,12 +53,15 @@ npm run dev
 Server will run on:
 👉 http://localhost:5000/api/v1
 
-👥 User Roles
-Role	Description
+#👥 User Roles
+
+## Role	Description
+
 Admin	Manage users, view all parcels, update statuses, block/unblock users
 Sender	Create parcels, cancel if not dispatched, view own parcels
 Receiver	View incoming parcels, confirm delivery, view delivery history
-🔐 Authentication
+
+##🔐 Authentication
 
 Register: POST /api/v1/users/register
 
@@ -66,21 +69,36 @@ Login: POST /api/v1/auth/login
 
 JWT stored in cookies or Authorization header
 
-📦 Parcel Endpoints
-Endpoint	Method	Access	Description
-/api/v1/parcels	POST	Sender	Create new parcel
+##📦 Parcel Endpoints
+
+###Endpoint	Method	Access	Description
+
+/api/v1/parcels	POST	Sender	Create new parcel      
+
 /api/v1/parcels/me	GET	Sender	View own parcels
+
 /api/v1/parcels/incoming	GET	Receiver	View incoming parcels
+
 /api/v1/parcels/:id/cancel	PATCH	Sender/Admin	Cancel a parcel (if not dispatched)
+
 /api/v1/parcels/:id/confirm	PATCH	Receiver/Admin	Confirm delivery
+
 /api/v1/parcels/:id/status	PATCH	Admin	Update parcel status
+
 /api/v1/parcels/:trackingId	GET	Public	Track parcel by tracking ID
+
 /api/v1/parcels/history	GET	Receiver	View delivered history
+
 /api/v1/parcels	GET	Admin	View all parcels
-👮 User Management (Admin Only)
-Endpoint	Method	Description
+
+##👮 User Management (Admin Only)
+
+###Endpoint	Method	Description
+
 /api/v1/users/:id/status	PATCH	Block/Unblock users
-📜 Parcel Status Flow
+
+##📜 Parcel Status Flow
+
 REQUESTED → PICKED → IN_TRANSIT → DELIVERED
               ↘
              CANCELED (if not dispatched)
@@ -94,7 +112,7 @@ Each parcel contains a trackingEvents[] array storing status history:
   "updatedBy": "adminId",
   "note": "Parcel reached distribution hub"
 }
-
+33
 ✅ Validation Rules
 
 Passwords hashed with bcrypt
@@ -106,4 +124,5 @@ Role-based access via JWT middleware
 Senders can cancel only their parcels (if not dispatched)
 
 Receivers can confirm only their incoming parcels
+
 
