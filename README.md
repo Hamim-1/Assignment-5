@@ -53,7 +53,7 @@ npm run dev
 Server will run on:
 👉 http://localhost:5000/api/v1
 
-#👥 User Roles
+# 👥 User Roles
 
 ## Role	Description
 
@@ -61,7 +61,7 @@ Admin	Manage users, view all parcels, update statuses, block/unblock users
 Sender	Create parcels, cancel if not dispatched, view own parcels
 Receiver	View incoming parcels, confirm delivery, view delivery history
 
-##🔐 Authentication
+## 🔐 Authentication
 
 Register: POST /api/v1/users/register
 
@@ -69,9 +69,9 @@ Login: POST /api/v1/auth/login
 
 JWT stored in cookies or Authorization header
 
-##📦 Parcel Endpoints
+## 📦 Parcel Endpoints
 
-###Endpoint	Method	Access	Description
+### Endpoint	Method	Access	Description
 
 /api/v1/parcels	POST	Sender	Create new parcel      
 
@@ -91,13 +91,13 @@ JWT stored in cookies or Authorization header
 
 /api/v1/parcels	GET	Admin	View all parcels
 
-##👮 User Management (Admin Only)
+## 👮 User Management (Admin Only)
 
 ###Endpoint	Method	Description
 
 /api/v1/users/:id/status	PATCH	Block/Unblock users
 
-##📜 Parcel Status Flow
+## 📜 Parcel Status Flow
 
 REQUESTED → PICKED → IN_TRANSIT → DELIVERED
               ↘
@@ -112,8 +112,8 @@ Each parcel contains a trackingEvents[] array storing status history:
   "updatedBy": "adminId",
   "note": "Parcel reached distribution hub"
 }
-33
-✅ Validation Rules
+
+## ✅ Validation Rules
 
 Passwords hashed with bcrypt
 
@@ -124,5 +124,6 @@ Role-based access via JWT middleware
 Senders can cancel only their parcels (if not dispatched)
 
 Receivers can confirm only their incoming parcels
+
 
 
