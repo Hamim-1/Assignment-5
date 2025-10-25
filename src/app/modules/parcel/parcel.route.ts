@@ -7,24 +7,34 @@ import { Role } from "../user/user.interface";
 
 const router = Router();
 
-router.get("/:id/status-log", checkAuth(Role.SENDER, Role.RECEIVER, Role.ADMIN), ParcelController.getParcelStatusLog);
+// sender routes
+router.post("/", checkAuth(Role.SENDER), validateRequest(createParcelZodSchema), ParcelController.createParcel);
 
+router.patch("/:id/cancel", checkAuth(Role.SENDER, Role.ADMIN), ParcelController.cancelParcel);
+
+router.get("/me", checkAuth(Role.SENDER), ParcelController.getMyParcels);
+
+
+// receiver routes
 router.get("/history", checkAuth(Role.RECEIVER), ParcelController.getDeliveryHistory);
 
-router.get("/track/:trackingId", ParcelController.trackParcelByTrackingId);
+router.patch("/:id/confirm", checkAuth(Role.RECEIVER, Role.ADMIN), ParcelController.confirmParcelDelivery);
 
+router.get("/incoming", checkAuth(Role.RECEIVER), ParcelController.getIncomingParcels);
+
+// admin routes
 router.get("/", checkAuth(Role.ADMIN), ParcelController.getAllParcels);
 
 router.patch("/:id/status", checkAuth(Role.ADMIN), ParcelController.updateParcelStatus);
 
-router.patch("/:id/cancel", checkAuth(Role.SENDER, Role.ADMIN), ParcelController.cancelParcel);
+// all user routes
+router.get("/:id/status-log", checkAuth(Role.SENDER, Role.RECEIVER, Role.ADMIN), ParcelController.getParcelStatusLog);
 
-router.patch("/:id/confirm", checkAuth(Role.RECEIVER, Role.ADMIN), ParcelController.confirmParcelDelivery);
+// public routes
+router.get("/track/:trackingId", ParcelController.trackParcelByTrackingId);
 
-router.get("/me", checkAuth(Role.SENDER), ParcelController.getMyParcels);
 
-router.get("/incoming", checkAuth(Role.RECEIVER), ParcelController.getIncomingParcels);
 
-router.post("/", checkAuth(Role.SENDER), validateRequest(createParcelZodSchema), ParcelController.createParcel);
+
 
 export const ParcelRoutes = router;
