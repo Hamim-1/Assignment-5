@@ -73,27 +73,22 @@ JWT stored in cookies or Authorization header
 
 ### Endpoint	Method	Access	Description
 
-/api/v1/parcels	POST	Sender	Create new parcel      
+| Endpoint                      | Method    | Access         | Description                         |
+| ----------------------------- | --------- | -------------- | ----------------------------------- |
+| `/api/v1/parcels`             | **POST**  | Sender         | Create new parcel                   |
+| `/api/v1/parcels/me`          | **GET**   | Sender         | View own parcels                    |
+| `/api/v1/parcels/incoming`    | **GET**   | Receiver       | View incoming parcels               |
+| `/api/v1/parcels/:id/cancel`  | **PATCH** | Sender/Admin   | Cancel a parcel (if not dispatched) |
+| `/api/v1/parcels/:id/confirm` | **PATCH** | Receiver/Admin | Confirm delivery                    |
+| `/api/v1/parcels/:id/status`  | **PATCH** | Admin          | Update parcel status                |
+| `/api/v1/parcels/:trackingId` | **GET**   | Public         | Track parcel by tracking ID         |
+| `/api/v1/parcels/history`     | **GET**   | Receiver       | View delivered history              |
+| `/api/v1/parcels`             | **GET**   | Admin          | View all parcels                    |
 
-/api/v1/parcels/me	GET	Sender	View own parcels
-
-/api/v1/parcels/incoming	GET	Receiver	View incoming parcels
-
-/api/v1/parcels/:id/cancel	PATCH	Sender/Admin	Cancel a parcel (if not dispatched)
-
-/api/v1/parcels/:id/confirm	PATCH	Receiver/Admin	Confirm delivery
-
-/api/v1/parcels/:id/status	PATCH	Admin	Update parcel status
-
-/api/v1/parcels/:trackingId	GET	Public	Track parcel by tracking ID
-
-/api/v1/parcels/history	GET	Receiver	View delivered history
-
-/api/v1/parcels	GET	Admin	View all parcels
 
 ## 👮 User Management (Admin Only)
 
-###Endpoint	Method	Description
+### Endpoint	Method	Description
 
 /api/v1/users/:id/status	PATCH	Block/Unblock users
 
@@ -124,6 +119,7 @@ Role-based access via JWT middleware
 Senders can cancel only their parcels (if not dispatched)
 
 Receivers can confirm only their incoming parcels
+
 
 
 
