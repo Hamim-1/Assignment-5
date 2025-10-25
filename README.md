@@ -33,7 +33,9 @@ cp .env.example .env
 
 # Server
 PORT=5000
+
 DB_URL=your_mongodb_uri
+
 NODE_ENV=development
 
 # Bcrypt
@@ -41,6 +43,7 @@ BCRYPT_SALT_ROUNDS=10
 
 # JWT
 JWT_ACCESS_SECRET=your_jwt_secret_here
+
 JWT_ACCESS_EXPIRES=1d
 
 # 4️⃣ Run the server
@@ -103,3 +106,4 @@ Role-based access via JWT middleware
 Senders can cancel only their parcels (if not dispatched)
 
 Receivers can confirm only their incoming parcels
+
