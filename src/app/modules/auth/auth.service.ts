@@ -1,5 +1,6 @@
 import { envVArs } from "../../config/env";
 import AppError from "../../errorHelpers/AppError";
+import { createNewAccessTokenWithRefreshToken } from "../../utils/createUserToken";
 import { generateToken } from "../../utils/jwt";
 import { IUser, Status } from "../user/user.interface";
 import { User } from "../user/user.model";
@@ -27,14 +28,25 @@ const credentialsLogin = async (payload: Partial<IUser>) => {
     }
 
     const accessToken = generateToken(jwtPayload, envVArs.JWT_ACCESS_SECRET, envVArs.JWT_ACCESS_EXPIRES);
+    const refreshToken = generateToken(jwtPayload, envVArs.JWT_REFRESH_SECRET, envVArs.JWT_REFRESH_EXPIRES);
 
     const { password: pass, ...rest } = user.toObject();
     return {
         accessToken,
+        refreshToken,
         user: rest
     };
 }
 
+const getNewAccessToken = async (token: string) => {
+    const accessToken = await createNewAccessTokenWithRefreshToken(token);
+
+    return {
+        accessToken,
+    }
+}
+
 export const AuthService = {
-    credentialsLogin
+    credentialsLogin,
+    getNewAccessToken
 }

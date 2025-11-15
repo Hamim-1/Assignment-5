@@ -40,10 +40,16 @@ const createParcel = async (payload: Partial<IParcel>, senderId: string) => {
     return parcel;
 
 }
-const getMyParcels = async (userId: string) => {
-    const parcels = await Parcel.find({ sender: userId });
+const getMyParcels = async (userId: string, role: string) => {
 
-    return parcels;
+    if (role === "SENDER") {
+
+        return await Parcel.find({ sender: userId });
+    } else {
+        return await Parcel.find({ receiver: userId });
+
+    }
+
 }
 const getAllParcels = async (query: any) => {
     const filter: any = {};

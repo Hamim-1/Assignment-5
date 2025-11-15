@@ -20,6 +20,7 @@ const createUser = catchAsync(async (req: Request, res: Response, next: NextFunc
 const updateUserStatus = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.params.id;
     const status = req.body?.status;
+
     const updatedUser = await UserService.updateUserStatus(userId, status);
     sendResponse(res, {
         statusCode: 200,
@@ -30,7 +31,20 @@ const updateUserStatus = catchAsync(async (req: Request, res: Response, next: Ne
     })
 })
 
+const getAllUsers = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const users = await UserService.getAllUser(req.query);
+
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Users retrieved successfully",
+        data: users
+
+    })
+})
+
 export const UserController = {
     createUser,
-    updateUserStatus
+    updateUserStatus,
+    getAllUsers
 }

@@ -21,7 +21,7 @@ const createParcel = catchAsync(async (req: Request, res: Response, next: NextFu
 
 const getMyParcels = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const user = req.user;
-    const parcels = await ParcelService.getMyParcels(user.userId);
+    const parcels = await ParcelService.getMyParcels(user.userId, user.role);
 
     sendResponse(res, {
         statusCode: 200,
@@ -90,13 +90,13 @@ const cancelParcel = catchAsync(async (req: Request, res: Response, next: NextFu
 
 const confirmParcelDelivery = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const user = req.user;
-    const parcerId = req.params.id;
-    const canceledParcel = await ParcelService.confirmParcelDelivery(parcerId, user.userId, user.role);
+    const parcelrId = req.params.id;
+    const confirmParcel = await ParcelService.confirmParcelDelivery(parcelrId, user.userId, user.role);
     sendResponse(res, {
         statusCode: 200,
         success: true,
         message: "Parcels Devlivered successfully",
-        data: canceledParcel
+        data: confirmParcel
 
     })
 })

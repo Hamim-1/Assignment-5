@@ -12,7 +12,7 @@ router.post("/", checkAuth(Role.SENDER), validateRequest(createParcelZodSchema),
 
 router.patch("/:id/cancel", checkAuth(Role.SENDER, Role.ADMIN), ParcelController.cancelParcel);
 
-router.get("/me", checkAuth(Role.SENDER), ParcelController.getMyParcels);
+router.get("/me", checkAuth(Role.SENDER, Role.RECEIVER), ParcelController.getMyParcels);
 
 
 // receiver routes

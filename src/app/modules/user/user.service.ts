@@ -32,8 +32,24 @@ const updateUserStatus = async (userId: string, status: string) => {
     return updatedUser;
 }
 
+const getAllUser = async (query: any) => {
+    const filter: any = {};
+
+    if (query.status) {
+        filter.status = query.status;
+    }
+
+    if (query.sender) {
+        filter.role = query.role;
+    }
+
+    const users = await User.find(filter);
+
+    return users;
+}
 
 export const UserService = {
     createUser,
-    updateUserStatus
+    updateUserStatus,
+    getAllUser
 }

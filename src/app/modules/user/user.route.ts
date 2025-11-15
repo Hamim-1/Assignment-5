@@ -6,6 +6,7 @@ import { checkAuth } from "../../middlewares/checkAuth";
 import { Role } from "./user.interface";
 
 const router = Router();
+router.get("/", checkAuth(Role.ADMIN), UserController.getAllUsers);
 router.post("/register", validateRequest(createUserZodSchema), UserController.createUser);
 
 router.patch("/:id/status", checkAuth(Role.ADMIN), UserController.updateUserStatus)
