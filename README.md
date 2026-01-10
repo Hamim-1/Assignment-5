@@ -1,129 +1,179 @@
-﻿# Assignment-5
-📦 Parcel Delivery API
+🛒 E-Commerce Backend API
 
-🌐 Live API Link https://assignment-5-ivory-phi.vercel.app
+🌐 Live API: https://assignment-8-backend-omega.vercel.app/
 
 🎯 Overview
 
-This is a secure, role-based backend API for managing parcel delivery operations — inspired by services like Pathao Courier or Sundarban.
-It allows Senders, Receivers, and Admins to create, track, update, and manage parcel deliveries.
+This is a secure, role-based E-commerce Backend API built using Node.js, Express, TypeScript, and MongoDB.
+
+It supports User Authentication, Product Management, Cart & Orders, Payments, Wishlist, and Reviews, with JWT-based authorization and role-based access control for Users and Admins.
 
 🚀 Tech Stack
 
-Node.js + Express.js
+Node.js
+
+Express.js
 
 TypeScript
 
 MongoDB + Mongoose
 
-Zod (request validation)
+Zod (Request validation)
 
 JWT Authentication
 
-bcrypt (password hashing)
+bcrypt (Password hashing)
+
+Multer (Image upload)
+
+SSLCommerz (Payment Gateway Integration)
 
 ⚙️ Setup & Installation
-# 1️⃣ Clone the repo
-git clone https://github.com/Hamim-1/Assignment-5.git
+1️⃣ Clone the Repository
+git clone https://github.com/Hamim-1/Assignment-8-backend
 
-# 2️⃣ Install dependencies
+2️⃣ Install Dependencies
 npm install
 
-# 3️⃣ Setup environment variables
+3️⃣ Configure Environment Variables
 cp .env.example .env
 
-.env file example
-
+Example .env file
 # Server
 PORT=5000
+NODE_ENV=production
 
-DB_URL=your_mongodb_uri
-
-NODE_ENV=development
+# Database
+DB_URL=mongodb+srv://<username>:<password>@cluster0.mongodb.net/<dbname>?retryWrites=true&w=majority
 
 # Bcrypt
-BCRYPT_SALT_ROUNDS=10
+BCRYPT_SALT_ROUND=10
 
 # JWT
-JWT_ACCESS_SECRET=your_jwt_secret_here
-
+JWT_ACCESS_SECRET=your_access_secret
 JWT_ACCESS_EXPIRES=1d
+JWT_REFRESH_SECRET=your_refresh_secret
+JWT_REFRESH_EXPIRES=7d
 
-# 4️⃣ Run the server
+# SSLCommerz Credentials
+SSL_STORE_ID=your_store_id
+SSL_STORE_PASS=your_store_password
+
+# SSLCommerz API URLs
+SSL_PAYMENT_API=https://sandbox.sslcommerz.com/gwprocess/v4/api.php
+SSL_VALIDATION_API=https://sandbox.sslcommerz.com/validator/api/validationserverAPI.php
+
+# SSLCommerz IPN
+SSL_IPN_URL=https://your-backend-url/api/v1/payment/validate-payment
+
+# SSLCommerz Backend Callback URLs
+SSL_SUCCESS_BACKEND_URL=https://your-backend-url/api/v1/payment/success
+SSL_FAIL_BACKEND_URL=https://your-backend-url/api/v1/payment/fail
+SSL_CANCEL_BACKEND_URL=https://your-backend-url/api/v1/payment/cancel
+
+# SSLCommerz Frontend Redirect URLs
+SSL_SUCCESS_FRONTEND_URL=https://your-frontend-url/success
+SSL_FAIL_FRONTEND_URL=https://your-frontend-url/fail
+SSL_CANCEL_FRONTEND_URL=https://your-frontend-url/cancel
+
+# Cloudinary
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+
+4️⃣ Run the Server
 npm run dev
 
 
-Server will run on:
-👉 http://localhost:5000/api/v1
+📌 Base URL
 
-# 👥 User Roles
+http://localhost:5000/api/v1
 
-## Role	Description
+👥 User Roles
+Role	Description
+Admin	Manage users, products, orders
+User	Browse products, manage cart, place orders
+🔐 Authentication
+Auth Routes
+Endpoint	Method	Access	Description
+/api/v1/auth/login	POST	Public	Login user
+/api/v1/auth/me	GET	User / Admin	Get logged-in user
+/api/v1/auth/refresh-token	POST	Public	Get new access token
+/api/v1/auth/logout	POST	User / Admin	Logout user
 
-Admin	Manage users, view all parcels, update statuses, block/unblock users
-Sender	Create parcels, cancel if not dispatched, view own parcels
-Receiver	View incoming parcels, confirm delivery, view delivery history
+🔑 JWT is sent via Authorization header or cookies.
 
-## 🔐 Authentication
+👤 User Management
+User Routes
+Endpoint	Method	Access	Description
+/api/v1/users/register	POST	Public	Register new user
+/api/v1/users	GET	Admin	Get all users
+/api/v1/users/:id/status	PATCH	Admin	Block / Unblock user
+/api/v1/users/wishlist	GET	User	Get wishlist
+/api/v1/users/wishlist/:id	POST	User	Add product to wishlist
+/api/v1/users/wishlist/:id	DELETE	User	Remove product from wishlist
+📦 Product Management
+Product Routes
+Endpoint	Method	Access	Description
+/api/v1/products	GET	Public	Get all products
+/api/v1/products/:id	GET	Public	Get single product
+/api/v1/products	POST	Admin	Add new product
+/api/v1/products/:id	PATCH	Admin	Update product
+/api/v1/products/:id	DELETE	Admin	Delete product
 
-Register: POST /api/v1/users/register
+📌 Product image upload handled using Multer.
 
-Login: POST /api/v1/auth/login
+🛒 Cart Management
+Cart Routes
+Endpoint	Method	Access	Description
+/api/v1/carts	POST	User	Add product to cart
+/api/v1/carts	GET	User	Get user cart
+/api/v1/carts/:id	DELETE	User	Remove cart item
+/api/v1/carts/clear	DELETE	User	Clear cart
+📦 Order Management
+Order Routes
+Endpoint	Method	Access	Description
+/api/v1/orders	POST	User / Admin	Create order
+/api/v1/orders	GET	Admin	Get all orders
+/api/v1/orders/history	GET	User	Get order history
+💳 Payment Integration
+Payment Routes
+Endpoint	Method	Description
+/api/v1/payment/success	POST	Payment success callback
+/api/v1/payment/fail	POST	Payment failure callback
+/api/v1/payment/cancel	POST	Payment cancel callback
+/api/v1/payment/validate-payment	POST	Validate payment
+⭐ Review System
+Review Routes
+Endpoint	Method	Access	Description
+/api/v1/reviews	POST	User	Add review
+/api/v1/reviews/:id	DELETE	User / Admin	Delete review
+/api/v1/reviews/product/:id	GET	Public	Get product reviews
+✅ Security & Validation
 
-JWT stored in cookies or Authorization header
+Passwords hashed using bcrypt
 
-## 📦 Parcel Endpoints
+Input validation with Zod
 
-### Endpoint	Method	Access	Description
+JWT-based authentication
 
-| Endpoint                      | Method    | Access         | Description                         |
-| ----------------------------- | --------- | -------------- | ----------------------------------- |
-| `/api/v1/parcels`             | **POST**  | Sender         | Create new parcel                   |
-| `/api/v1/parcels/me`          | **GET**   | Sender         | View own parcels                    |
-| `/api/v1/parcels/incoming`    | **GET**   | Receiver       | View incoming parcels               |
-| `/api/v1/parcels/:id/cancel`  | **PATCH** | Sender/Admin   | Cancel a parcel (if not dispatched) |
-| `/api/v1/parcels/:id/confirm` | **PATCH** | Receiver/Admin | Confirm delivery                    |
-| `/api/v1/parcels/:id/status`  | **PATCH** | Admin          | Update parcel status                |
-| `/api/v1/parcels/:trackingId` | **GET**   | Public         | Track parcel by tracking ID         |
-| `/api/v1/parcels/history`     | **GET**   | Receiver       | View delivered history              |
-| `/api/v1/parcels`             | **GET**   | Admin          | View all parcels                    |
+Role-based authorization
 
+Admin-only protected routes
 
-## 👮 User Management (Admin Only)
+Secure payment verification
 
-### Endpoint	Method	Description
-
-/api/v1/users/:id/status	PATCH	Block/Unblock users
-
-## 📜 Parcel Status Flow
-
-REQUESTED → PICKED → IN_TRANSIT → DELIVERED
-              ↘
-             CANCELED (if not dispatched)
-
-
-Each parcel contains a trackingEvents[] array storing status history:
-
-{
-  "status": "IN_TRANSIT",
-  "timestamp": "2025-10-23T10:00:00Z",
-  "updatedBy": "adminId",
-  "note": "Parcel reached distribution hub"
-}
-
-## ✅ Validation Rules
-
-Passwords hashed with bcrypt
-
-Input validated using Zod
-
-Role-based access via JWT middleware
-
-Senders can cancel only their parcels (if not dispatched)
-
-Receivers can confirm only their incoming parcels
-
-
-
-
-
+📌 Project Structure
+src/
+├── modules/
+│   ├── auth
+│   ├── user
+│   ├── product
+│   ├── cart
+│   ├── order
+│   ├── payment
+│   └── review
+├── middlewares
+├── routes
+├── utils
+└── app.ts
