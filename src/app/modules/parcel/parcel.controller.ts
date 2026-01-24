@@ -138,6 +138,44 @@ const getParcelStatusLog = catchAsync(async (req: Request, res: Response, next: 
     })
 })
 
+const getReceiverRequestedParcels = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const user = req.user;
+    const parcels = await ParcelService.getReceiverRequestedParcels(user.userId);
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Requested parcel retrieved successfully",
+        data: parcels
+
+    })
+})
+
+const acceptParcelRequest = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const user = req.user;
+    const parcelId = req.params.id;
+    const parcel = await ParcelService.acceptParcelRequest(user.userId, parcelId);
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Receiver Accept the Parcel Request",
+        data: parcel
+
+    })
+})
+
+const rejectParcelRequest = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const user = req.user;
+    const parcelId = req.params.id;
+    const parcel = await ParcelService.rejectParcelRequest(user.userId, parcelId);
+    sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: "Receiver Accept the Parcel Request",
+        data: parcel
+
+    })
+})
+
 export const ParcelController = {
     createParcel,
     getAllParcels,
@@ -148,5 +186,8 @@ export const ParcelController = {
     confirmParcelDelivery,
     trackParcelByTrackingId,
     getDeliveryHistory,
-    getParcelStatusLog
+    getParcelStatusLog,
+    getReceiverRequestedParcels,
+    rejectParcelRequest,
+    acceptParcelRequest
 }

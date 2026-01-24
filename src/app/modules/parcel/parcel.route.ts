@@ -20,7 +20,14 @@ router.get("/history", checkAuth(Role.RECEIVER), ParcelController.getDeliveryHis
 
 router.patch("/:id/confirm", checkAuth(Role.RECEIVER, Role.ADMIN), ParcelController.confirmParcelDelivery);
 
+router.patch("/:id/accept", checkAuth(Role.RECEIVER), ParcelController.acceptParcelRequest
+);
+
+router.patch("/:id/reject", checkAuth(Role.RECEIVER), ParcelController.rejectParcelRequest
+);
+
 router.get("/incoming", checkAuth(Role.RECEIVER), ParcelController.getIncomingParcels);
+router.get("/requests", checkAuth(Role.RECEIVER), ParcelController.getReceiverRequestedParcels);
 
 // admin routes
 router.get("/", checkAuth(Role.ADMIN), ParcelController.getAllParcels);

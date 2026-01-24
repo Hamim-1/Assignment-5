@@ -57,6 +57,14 @@ const getAllParcels = async (query: any) => {
     if (query.status) {
         filter.status = query.status;
     }
+    if (query.status) {
+        filter.status = {
+            $ne: "REQUESTED",
+            $eq: query.status
+        };
+    } else {
+        filter.status = { $ne: "REQUESTED" };
+    }
 
     if (query.sender) {
         filter.sender = query.sender;
@@ -195,6 +203,41 @@ const getParcelStatusLog = async (userId: string, parcelId: string) => {
     return parcel.trackingEvents;
 };
 
+const getReceiverRequestedParcels = async (userId: string) => {
+    const parcels = await Parcel.find({ receiver: userId });
+
+    if (!parcels) {
+        throw new AppError(404, "Parcel not found");
+    }
+
+
+    return parcels;
+};
+
+const acceptParcelRequest = async (userId: string, parcelId: string) => {
+    const parcel = await Parcel.findOne({ receiver: userId, _id: parcelId });
+
+    if (!parcel) {
+        throw new AppError(404, "Parcel not found");
+    }
+
+    parcel.status = ParcelStatus.ACCEPTED;
+    parcel.save();
+    return parcel;
+};
+
+const rejectParcelRequest = async (userId: string, parcelId: string) => {
+    const parcel = await Parcel.findOne({ receiver: userId, _id: parcelId });
+
+    if (!parcel) {
+        throw new AppError(404, "Parcel not found");
+    }
+
+    parcel.status = ParcelStatus.REJECTED;
+    parcel.save();
+    return parcel;
+};
+
 
 
 export const ParcelService = {
@@ -207,6 +250,9 @@ export const ParcelService = {
     confirmParcelDelivery,
     trackParcelByTrackingId,
     getDeliveryHistory,
-    getParcelStatusLog
+    getParcelStatusLog,
+    getReceiverRequestedParcels,
+    acceptParcelRequest,
+    rejectParcelRequest
 
 }
