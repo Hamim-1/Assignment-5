@@ -106,7 +106,17 @@ const updateParcelStatus = async (parcelId: string, status: ParcelStatus, adminI
 }
 
 const getIncomingParcels = async (userId: string) => {
-    const parcels = await Parcel.find({ receiver: userId });
+    const parcels = await Parcel.find({
+        receiver: userId,
+        status: {
+            $in: [
+                ParcelStatus.ACCEPTED,
+                ParcelStatus.PICKED,
+                ParcelStatus.IN_TRANSIT
+            ]
+        },
+    });
+
 
     return parcels;
 }
@@ -204,7 +214,7 @@ const getParcelStatusLog = async (userId: string, parcelId: string) => {
 };
 
 const getReceiverRequestedParcels = async (userId: string) => {
-    const parcels = await Parcel.find({ receiver: userId });
+    const parcels = await Parcel.find({ receiver: userId, status: ParcelStatus.REQUESTED });
 
     if (!parcels) {
         throw new AppError(404, "Parcel not found");
